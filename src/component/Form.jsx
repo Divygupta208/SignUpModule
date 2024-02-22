@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Card from "./Card";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../store/AuthContext";
 const Form = () => {
+  const { setToken, setIsLoggedIn } = useContext(AuthContext);
   const emailRef = useRef();
   const passwordRef = useRef();
   const [login, setLogIn] = useState(false);
@@ -57,9 +59,11 @@ const Form = () => {
         if (response.ok) {
           const data = await response.json();
           localStorage.setItem("token", data.idToken);
+          setToken(data.idToken);
+          setIsLoggedIn(true);
+          navigate("/home");
           setSending(false);
           notify("successfully signed in");
-          navigate("/home");
         } else {
           const data = await response.json();
           setSending(false);
