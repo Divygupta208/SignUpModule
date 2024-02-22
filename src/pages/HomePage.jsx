@@ -1,11 +1,8 @@
 import React from "react";
+import Home from "../component/Home";
 
 const HomePage = () => {
-  return (
-    <div className="text-center mt-[20vw] text-3xl">
-      Welcome To Expense Tracker
-    </div>
-  );
+  return <Home />;
 };
 
 export default HomePage;
