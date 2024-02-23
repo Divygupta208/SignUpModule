@@ -78,24 +78,31 @@ const CompleteProfile = () => {
 
   const verifyEmailHandler = async () => {
     setLoading(true);
-    const response = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
-        import.meta.env.VITE_API_KEY
-      }`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          requestType: "VERIFY_EMAIL",
-          idToken: token,
-        }),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    try {
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
+          import.meta.env.VITE_API_KEY
+        }`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            requestType: "VERIFY_EMAIL",
+            idToken: token,
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-    if (response.ok) {
-      const data = await response.json();
-      setLoading(false);
-      notify("Email Verified");
+      if (response.ok) {
+        const data = await response.json();
+        setLoading(false);
+        notify("Email Verified");
+      } else {
+        const data = await response.json();
+        notify(data.error.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
