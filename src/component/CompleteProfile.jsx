@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, stagger } from "framer-motion";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import Card from "./Card";
 import { AuthContext } from "../store/AuthContext";
@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 const CompleteProfile = () => {
   const [name, setName] = useState();
   const [profile, setProfile] = useState();
-
+  const [loading, setLoading] = useState(false);
   const nameRef = useRef();
   const imageUrlRef = useRef();
   const { token, isLoggedIn } = useContext(AuthContext);
@@ -76,6 +76,29 @@ const CompleteProfile = () => {
     }
   };
 
+  const verifyEmailHandler = async () => {
+    setLoading(true);
+    const response = await fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${
+        import.meta.env.VITE_API_KEY
+      }`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          requestType: "VERIFY_EMAIL",
+          idToken: token,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      setLoading(false);
+      notify("Email Verified");
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -97,7 +120,7 @@ const CompleteProfile = () => {
             }}
             className="bg-violet-700 text-white h-auto rounded-xl p-1"
           >
-            Complete Profile
+            Complete
           </motion.button>
 
           <motion.div
@@ -147,18 +170,54 @@ const CompleteProfile = () => {
             />
             {/* <input type="file" accept="image/*" onChange={handleChange} /> */}
           </div>
-          <motion.button
-            whileTap={{
-              scale: 1.2,
-              transition: {
-                type: "spring",
-                bounce: 0.5,
-              },
-            }}
-            className=" rounded-lg p-1 bg-orange-950 text-white w-[10rem] mt-10 border-2"
-          >
-            Update
-          </motion.button>
+
+          <div className="flex justify-between">
+            <motion.button
+              whileTap={{
+                scale: 1.2,
+                transition: {
+                  type: "spring",
+                  bounce: 0.5,
+                },
+              }}
+              className=" rounded-lg p-1 bg-orange-950 text-white w-[10rem] mt-10 border-2"
+            >
+              Update
+            </motion.button>
+            <motion.button
+              whileTap={{
+                scale: 1.2,
+                transition: {
+                  type: "spring",
+                  bounce: 0.5,
+                },
+              }}
+              onClick={verifyEmailHandler}
+              type="button"
+              className=" rounded-lg p-1 bg-orange-950 text-white w-[10rem] mt-10 border-2"
+            >
+              {loading ? (
+                <div>
+                  <motion.span
+                    animate={{
+                      translateX: [1, 10, 1],
+                      transition: {
+                        repeat: Infinity,
+                        duration: 0.7,
+                      },
+                      opacity: 0,
+                    }}
+                  >
+                    <motion.span className="text-2xl">.</motion.span>
+                    <motion.span className="text-2xl">.</motion.span>
+                    <motion.span className="text-2xl">.</motion.span>
+                  </motion.span>
+                </div>
+              ) : (
+                "Verify Your Email"
+              )}
+            </motion.button>
+          </div>
         </form>
       </div>
     </>
