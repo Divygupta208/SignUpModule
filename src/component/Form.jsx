@@ -60,7 +60,7 @@ const Form = () => {
           const data = await response.json();
           localStorage.setItem("token", data.idToken);
           setToken(data.idToken);
-          setIsLoggedIn(true);
+
           navigate("/home");
           setSending(false);
           notify("successfully signed in");
@@ -107,6 +107,10 @@ const Form = () => {
       }
     }
   };
+
+  const navigateToForgot = () => {
+    navigate("/forgotpassword");
+  };
   return (
     <>
       <ToastContainer />
@@ -120,36 +124,38 @@ const Form = () => {
           ) : (
             <h2 className="text-2xl fixed mt-6">Sign Up</h2>
           )}
-          <input
-            type="text"
-            id="email"
-            placeholder="email"
-            className="bg-zinc-300 mt-[100px] rounded-xl h-10 w-64 p-5"
-            ref={emailRef}
-            required
-          />
-          <input
-            type="password"
-            id="password"
-            placeholder="password"
-            className="bg-zinc-300 mt-4 rounded-xl h-10 w-64 p-5"
-            ref={passwordRef}
-            onChange={validatePasswords}
-            required
-            minLength={6}
-          />
-          {!login && (
+          <div className="text-center">
+            <input
+              type="text"
+              id="email"
+              placeholder="email"
+              className="bg-zinc-300 mt-[100px] rounded-xl h-10 w-64 p-5"
+              ref={emailRef}
+              required
+            />
             <input
               type="password"
-              id="confirmpassword"
-              placeholder="Confirm Password"
+              id="password"
+              placeholder="password"
               className="bg-zinc-300 mt-4 rounded-xl h-10 w-64 p-5"
-              ref={confirmPasswordRef}
+              ref={passwordRef}
               onChange={validatePasswords}
               required
               minLength={6}
             />
-          )}
+            {!login && (
+              <input
+                type="password"
+                id="confirmpassword"
+                placeholder="Confirm Password"
+                className="bg-zinc-300 mt-4 rounded-xl h-10 w-64 p-5"
+                ref={confirmPasswordRef}
+                onChange={validatePasswords}
+                required
+                minLength={6}
+              />
+            )}
+          </div>
 
           {!confirmPass && (
             <p style={{ color: "red" }}>Passwords do not match</p>
@@ -172,6 +178,11 @@ const Form = () => {
               log in
             </button>
           </div>
+        )}
+        {login && (
+          <button className="mx-auto text-red-600" onClick={navigateToForgot}>
+            Forgot password ?
+          </button>
         )}
         {login && (
           <div className="relative mt-10 bg-green-200 border-black w-60 p-2 ms-[70px] rounded mb-7 text-green-700">

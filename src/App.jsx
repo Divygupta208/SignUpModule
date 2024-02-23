@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthContext } from "./store/AuthContext";
 import UserProfile from "./pages/UserProfile";
+import { AnimatePresence } from "framer-motion";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -17,7 +19,12 @@ function App() {
           path="/home"
           element={isLoggedIn ? <HomePage /> : <Navigate to={"/"} />}
         ></Route>
-
+        {/* <Route
+          path="/forgotpassword"
+          element=<AnimatePresence key={2} mode="sync">
+            <ForgotPassword></ForgotPassword>
+          </AnimatePresence>
+        /> */}
         <Route
           path="/profile"
           element={isLoggedIn ? <ProfilePage /> : <Navigate to={"/"} />}
