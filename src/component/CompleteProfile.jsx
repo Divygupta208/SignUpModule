@@ -4,6 +4,8 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import Card from "./Card";
 import { AuthContext } from "../store/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
+import { FcApproval } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
 
 const CompleteProfile = () => {
   const [name, setName] = useState();
@@ -11,6 +13,8 @@ const CompleteProfile = () => {
   const [loading, setLoading] = useState(false);
   const nameRef = useRef();
   const imageUrlRef = useRef();
+  const navigate = useNavigate();
+  const [verified, setVerified] = useState(false);
   const { token, isLoggedIn } = useContext(AuthContext);
   const notify = (text) => toast(text);
 
@@ -96,14 +100,20 @@ const CompleteProfile = () => {
       if (response.ok) {
         const data = await response.json();
         setLoading(false);
+        setVerified(true);
         notify("Email Verified");
       } else {
         const data = await response.json();
+        setLoading(false);
         notify(data.error.message);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const userProfileHandler = () => {
+    navigate(`/profile/${token}`);
   };
 
   return (
@@ -125,6 +135,7 @@ const CompleteProfile = () => {
                 damping: 5,
               },
             }}
+            onClick={userProfileHandler}
             className="bg-violet-700 text-white h-auto rounded-xl p-1"
           >
             Complete
@@ -215,13 +226,11 @@ const CompleteProfile = () => {
                       opacity: 0,
                     }}
                   >
-                    <motion.span className="text-2xl">.</motion.span>
-                    <motion.span className="text-2xl">.</motion.span>
-                    <motion.span className="text-2xl">.</motion.span>
+                    ...
                   </motion.span>
                 </div>
               ) : (
-                "Verify Your Email"
+                "Verify Email"
               )}
             </motion.button>
           </div>

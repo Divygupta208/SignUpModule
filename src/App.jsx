@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import { useContext, useEffect, useState } from "react";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthContext } from "./store/AuthContext";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -11,10 +12,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={isLoggedIn ? <Navigate to={"/home"} /> : <LoginPage />}
-        />
+        <Route path="/" element=<LoginPage /> />
         <Route
           path="/home"
           element={isLoggedIn ? <HomePage /> : <Navigate to={"/"} />}
@@ -23,6 +21,10 @@ function App() {
         <Route
           path="/profile"
           element={isLoggedIn ? <ProfilePage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/profile/:id"
+          element={isLoggedIn ? <UserProfile /> : <Navigate to={"/"} />}
         />
       </Routes>
     </>
