@@ -20,7 +20,10 @@ function App() {
           element={isLoggedIn ? <HomePage /> : <Navigate to={"/"} />}
         ></Route>
 
-        <Route path="profile" element=<ProfilePage /> />
+        <Route
+          path="/profile"
+          element={isLoggedIn ? <ProfilePage /> : <Navigate to={"/"} />}
+        />
       </Routes>
     </>
   );

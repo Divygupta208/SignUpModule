@@ -8,14 +8,15 @@ const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
   const userIsLoggedIn = !!token;
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const value = {
+    token: token,
+    isLoggedIn: userIsLoggedIn,
+    setToken: setToken,
+  };
 
   return (
-    <AuthContext.Provider
-      value={{ token, setToken, isLoggedIn, setIsLoggedIn }}
-    >
-      {props.children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
   );
 };
 

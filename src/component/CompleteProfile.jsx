@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import Card from "./Card";
@@ -6,10 +6,39 @@ import { AuthContext } from "../store/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 
 const CompleteProfile = () => {
+  const [name, setName] = useState();
+  const [profile, setProfile] = useState();
+
   const nameRef = useRef();
   const imageUrlRef = useRef();
-  const { token } = useContext(AuthContext);
+  const { token, isLoggedIn } = useContext(AuthContext);
   const notify = (text) => toast(text);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${
+          import.meta.env.VITE_API_KEY
+        }`,
+
+        {
+          method: "POST",
+          body: JSON.stringify({
+            idToken: token,
+          }),
+
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setName(data.users[0].displayName);
+        setProfile(data.users[0].photoUrl);
+      }
+    };
+    fetchUserData();
+  }, [token]);
   // function handleChange(e) {
   //   const file = e.target.files[0];
   //   if (file) {
@@ -91,11 +120,13 @@ const CompleteProfile = () => {
       <div className="relative  shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] mt-[30vh] h-auto w-[60vw] ml-[20vw] p-4 rounded-xl">
         <div className="flex justify-between p-3">
           <strong className="text-xl">Contact Details</strong>
-          <button className="text-red-400 border-2 border-red-200 p-2 rounded-xl">
+          <button className="text-red-400 border-2 border-red-500 p-2 rounded-xl  hover:">
             cancle
           </button>
         </div>
-
+        {profile && (
+          <img className="w-32 ml-[25vw] rounded-2xl" src={profile} />
+        )}
         <form onSubmit={onUpdateHandler}>
           <div className="flex flex-wrap gap-10 ml-[14rem] mt-[5rem]">
             <input
@@ -103,12 +134,16 @@ const CompleteProfile = () => {
               type="text"
               placeholder="Full Name"
               ref={nameRef}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <input
               className="border-slate-800 border-[1px] p-1 rounded-lg"
               type="text"
               placeholder="Profile Photo URL"
               ref={imageUrlRef}
+              value={profile}
+              onChange={(e) => setProfile(e.target.value)}
             />
             {/* <input type="file" accept="image/*" onChange={handleChange} /> */}
           </div>
