@@ -34,22 +34,8 @@ const UserProfilePage = () => {
     fetchUserData();
   }, []);
 
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
-
   return (
     <div>
-      <div className="flex justify-evenly p-10 shadow-xl">
-        <p className="text-2xl font-bold">Welcome</p>
-        <button
-          className="bg-orange-400 p-2 rounded-md"
-          onClick={logoutHandler}
-        >
-          Log Out
-        </button>
-      </div>
       <Example username={name} userImg={profile} />;
     </div>
   );

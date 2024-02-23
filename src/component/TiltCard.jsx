@@ -5,7 +5,6 @@ import { FiMousePointer } from "react-icons/fi";
 const Example = ({ username, userImg }) => {
   return (
     <div className="grid w-full  place-content-center  px-4 py-12 text-white">
-      Welcome To Your Profile
       <TiltCard username={username} userImg={userImg} />
     </div>
   );
