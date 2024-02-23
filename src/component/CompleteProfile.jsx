@@ -113,7 +113,7 @@ const CompleteProfile = () => {
   };
 
   const userProfileHandler = () => {
-    navigate(`/profile/${token}`);
+    navigate(`/user/expenses`);
   };
 
   return (

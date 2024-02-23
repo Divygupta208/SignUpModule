@@ -7,6 +7,9 @@ import { AuthContext } from "./store/AuthContext";
 import UserProfile from "./pages/UserProfile";
 import { AnimatePresence } from "framer-motion";
 import ForgotPassword from "./pages/ForgotPassword";
+import HomeRoot from "./pages/HomeRoot";
+import ExpensesDaily from "./component/ExpensesDaily";
+import UserProfilePage from "./component/UserProfilePage";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -19,20 +22,20 @@ function App() {
           path="/home"
           element={isLoggedIn ? <HomePage /> : <Navigate to={"/"} />}
         ></Route>
-        {/* <Route
+        <Route
           path="/forgotpassword"
           element=<AnimatePresence key={2} mode="sync">
             <ForgotPassword></ForgotPassword>
           </AnimatePresence>
-        /> */}
+        />
         <Route
           path="/profile"
           element={isLoggedIn ? <ProfilePage /> : <Navigate to={"/"} />}
         />
-        <Route
-          path="/profile/:id"
-          element={isLoggedIn ? <UserProfile /> : <Navigate to={"/"} />}
-        />
+        <Route path="/user" element=<HomeRoot />>
+          <Route path="profile/:id" element={<UserProfile />} />
+          <Route path="expenses" element={<ExpensesDaily />} />
+        </Route>
       </Routes>
     </>
   );
