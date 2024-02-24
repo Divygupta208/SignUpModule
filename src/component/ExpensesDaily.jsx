@@ -1,29 +1,81 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import ExpenseList from "./ExpenseList";
 const ExpensesDaily = () => {
-  const [expenses, setExpenses] = useState([
-    {
-      Amount: "500",
-      Description: "AutoRickshaw",
-      Category: "Travel",
-    },
-  ]);
+  const [expenses, setExpenses] = useState([]);
 
   const amountRef = useRef();
   const descRef = useRef();
   const categoryRef = useRef();
 
-  const addExpensesHandler = () => {
+  const fetchExpensesHandler = async () => {
+    const response = await fetch(
+      "https://react-http-7951f-default-rtdb.firebaseio.com/expenses.json"
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      const dataArray = Object.entries(data).map(([id, item]) => ({
+        _id: id,
+        id: item.Id,
+        Amount: item.Amount,
+        Category: item.Category,
+        Description: item.Description,
+      }));
+
+      setExpenses(dataArray);
+    }
+  };
+
+  useEffect(() => {
+    fetchExpensesHandler();
+  }, []);
+
+  const addExpensesHandler = async () => {
     const newExpense = {
+      id: Math.floor(Math.random() * 1000),
       Amount: amountRef.current.value,
       Description: descRef.current.value,
       Category: categoryRef.current.value,
     };
 
-    setExpenses((prev) => {
-      return [...prev, newExpense];
+    const response = fetch(
+      `https://react-http-7951f-default-rtdb.firebaseio.com/expenses.json`,
+      {
+        method: "POST",
+        body: JSON.stringify(newExpense),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      setExpenses((prev) => {
+        return [...prev, { ...newExpense, _id: data.name }];
+      });
+    }
+  };
+
+  const removeHandler = async (id, _id) => {
+    console.log(_id);
+    const response = await fetch(
+      `https://react-http-7951f-default-rtdb.firebaseio.com/expenses/${_id}.json/`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+    }
+
+    const filter = expenses.filter((expense) => {
+      return expense.id !== id;
     });
+
+    const updatedExpense = [...filter];
+
+    setExpenses(updatedExpense);
   };
 
   return (
@@ -91,7 +143,7 @@ const ExpensesDaily = () => {
         </div>
       </motion.form>
 
-      <ExpenseList expenses={expenses} />
+      <ExpenseList expenses={expenses} removeHandler={removeHandler} />
     </div>
   );
 };
