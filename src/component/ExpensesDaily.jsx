@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import ExpenseList from "./ExpenseList";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseAction } from "../store/Index";
 const ExpensesDaily = () => {
-  const [expenses, setExpenses] = useState([]);
+  //   const [expenses, setExpenses] = useState([]);
 
+  const expenses = useSelector((state) => state.expense.expenses);
+  const dispatch = useDispatch();
   const amountRef = useRef();
   const descRef = useRef();
   const categoryRef = useRef();
@@ -23,7 +27,9 @@ const ExpensesDaily = () => {
         Description: item.Description,
       }));
 
-      setExpenses(dataArray);
+      console.log(dataArray);
+
+      dispatch(expenseAction.setExpenses(dataArray));
     }
   };
 
@@ -39,7 +45,7 @@ const ExpensesDaily = () => {
       Category: categoryRef.current.value,
     };
 
-    const response = fetch(
+    const response = await fetch(
       `https://react-http-7951f-default-rtdb.firebaseio.com/expenses.json`,
       {
         method: "POST",
@@ -50,9 +56,7 @@ const ExpensesDaily = () => {
 
     if (response.ok) {
       const data = await response.json();
-      setExpenses((prev) => {
-        return [...prev, { ...newExpense, _id: data.name }];
-      });
+      dispatch(expenseAction.addExpense({ ...newExpense, _id: data.name }));
     }
   };
 
@@ -75,7 +79,7 @@ const ExpensesDaily = () => {
 
     const updatedExpense = [...filter];
 
-    setExpenses(updatedExpense);
+    dispatch(expenseAction.setExpenses(updatedExpense));
   };
 
   return (
@@ -143,7 +147,7 @@ const ExpensesDaily = () => {
         </div>
       </motion.form>
 
-      <ExpenseList expenses={expenses} removeHandler={removeHandler} />
+      <ExpenseList removeHandler={removeHandler} />
     </div>
   );
 };

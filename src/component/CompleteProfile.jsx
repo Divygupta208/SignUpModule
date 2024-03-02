@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { motion, stagger } from "framer-motion";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import Card from "./Card";
-import { AuthContext } from "../store/AuthContext";
+
 import { ToastContainer, toast } from "react-toastify";
 import { FcApproval } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CompleteProfile = () => {
   const [name, setName] = useState();
@@ -15,7 +16,7 @@ const CompleteProfile = () => {
   const imageUrlRef = useRef();
   const navigate = useNavigate();
   const [verified, setVerified] = useState(false);
-  const { token, isLoggedIn } = useContext(AuthContext);
+  const token = useSelector((state) => state.auth.token);
   const notify = (text) => toast(text);
 
   useEffect(() => {

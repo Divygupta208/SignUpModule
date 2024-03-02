@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../store/AuthContext";
+
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const { token } = useContext(AuthContext);
+  const token = useSelector((state) => state.auth.token);
 
   return (
     <div className="bg-slate-950 h-[10vh] w-[60vw] mx-auto mt-2 rounded-full ">

@@ -1,18 +1,17 @@
 import { Navigate, Route, Routes, redirect } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import { useContext, useEffect, useState } from "react";
 import ProfilePage from "./pages/ProfilePage";
-import { AuthContext } from "./store/AuthContext";
 import UserProfile from "./pages/UserProfile";
 import { AnimatePresence } from "framer-motion";
 import ForgotPassword from "./pages/ForgotPassword";
 import HomeRoot from "./pages/HomeRoot";
 import ExpensesDaily from "./component/ExpensesDaily";
-import UserProfilePage from "./component/UserProfilePage";
+
+import { useSelector } from "react-redux";
 
 function App() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   return (
     <>

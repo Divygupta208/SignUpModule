@@ -1,6 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 const ExpenseListItem = ({ expense, index, removeHandler }) => {
+  const isPremium = useSelector((state) => state.expense.isPremiumActivated);
+
   const handleRemove = () => {
     removeHandler(expense.id, expense._id);
   };
@@ -15,16 +18,29 @@ const ExpenseListItem = ({ expense, index, removeHandler }) => {
       transition={{ duration: 1 }}
       className="bg-white p-4 rounded mb-4 shadow-md flex items-center justify-between"
     >
-      <div>
-        <p className="text-gray-700 font-bold">{expense.Amount}</p>
-        <p className="text-gray-500">{expense.Description}</p>
-        <p className="text-teal-500">{expense.Category}</p>
-      </div>
+      {isPremium ? (
+        <div>
+          <p className="text-gray-400 font-bold">{expense.Amount}</p>
+          <p className="text-gray-400">{expense.Description}</p>
+          <p className="text-gray-400">{expense.Category}</p>
+        </div>
+      ) : (
+        <div>
+          <p className="text-gray-700 font-bold">{expense.Amount}</p>
+          <p className="text-gray-500">{expense.Description}</p>
+          <p className="text-teal-500">{expense.Category}</p>
+        </div>
+      )}
+
       <div className="flex space-x-2">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="bg-yellow-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          className={
+            isPremium
+              ? "bg-gray-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+              : "bg-yellow-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          }
         >
           Edit
         </motion.button>
@@ -32,7 +48,11 @@ const ExpenseListItem = ({ expense, index, removeHandler }) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleRemove}
-          className="bg-red-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          className={
+            isPremium
+              ? "bg-gray-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+              : "bg-red-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+          }
         >
           Remove
         </motion.button>

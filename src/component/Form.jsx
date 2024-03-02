@@ -1,11 +1,13 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Card from "./Card";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../store/AuthContext";
+
+import { useDispatch } from "react-redux";
+import { authAction } from "../store/Index";
 const Form = () => {
-  const { setToken, setIsLoggedIn } = useContext(AuthContext);
+  const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
   const [login, setLogIn] = useState(false);
@@ -59,8 +61,8 @@ const Form = () => {
         if (response.ok) {
           const data = await response.json();
           localStorage.setItem("token", data.idToken);
-          setToken(data.idToken);
-
+          dispatch(authAction.setToken(data.idToken));
+          dispatch(authAction.setIsLoggedIn(true));
           navigate("/home");
           setSending(false);
           notify("successfully signed in");
