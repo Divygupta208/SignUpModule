@@ -24,6 +24,7 @@ const expensesSlice = createSlice({
   initialState: {
     expenses: [],
     isPremiumActivated: false,
+    isSubscribed: false,
   },
   reducers: {
     addExpense: (state, action) => {
@@ -35,9 +36,29 @@ const expensesSlice = createSlice({
     },
     setExpenses: (state, action) => {
       state.expenses = action.payload;
+
       state.isPremiumActivated =
         state.expenses.reduce((total, expense) => total + expense.Amount, 0) >
         10000;
+    },
+
+    setIsSubscribed: (state, action) => {
+      state.isSubscribed = action.payload;
+    },
+    setIsPremium: (state, action) => {
+      state.isPremiumActivated = action.payload;
+    },
+  },
+});
+
+const themeSlice = createSlice({
+  name: "theme",
+  initialState: {
+    themeDark: false,
+  },
+  reducers: {
+    setThemeMode: (state) => {
+      state.themeDark = !state.themeDark;
     },
   },
 });
@@ -46,9 +67,11 @@ const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     expense: expensesSlice.reducer,
+    theme: themeSlice.reducer,
   },
 });
 
 export const authAction = authSlice.actions;
+export const themeAction = themeSlice.actions;
 export const expenseAction = expensesSlice.actions;
 export default store;

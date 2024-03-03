@@ -2,16 +2,20 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ExpenseListItem from "./ExpenseListItem";
 import Modal from "./Modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseAction } from "../store/Index";
 
 const ExpenseList = ({ removeHandler }) => {
   const expenses = useSelector((state) => state.expense.expenses);
   const isPremium = useSelector((state) => state.expense.isPremiumActivated);
-
+  const isSubscribed = useSelector((state) => state.expense.isSubscribed);
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(true);
+
   const handleSubscribe = () => {
-    // Add logic for handling subscription (e.g., redirect to payment page)
-    // For now, you can just close the modal
+    dispatch(expenseAction.setIsSubscribed(true));
+    dispatch(expenseAction.setIsPremium(false));
+
     setShowModal(false);
   };
 
@@ -30,6 +34,7 @@ const ExpenseList = ({ removeHandler }) => {
             expense={expense}
             index={index}
             removeHandler={removeHandler}
+            isSubscribed={isSubscribed}
           />
         ))}
       </motion.div>

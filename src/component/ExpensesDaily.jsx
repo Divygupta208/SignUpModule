@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import ExpenseList from "./ExpenseList";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../store/Index";
+import Switcher1 from "./ToggleButton";
 const ExpensesDaily = () => {
   //   const [expenses, setExpenses] = useState([]);
 
@@ -61,7 +62,6 @@ const ExpensesDaily = () => {
   };
 
   const removeHandler = async (id, _id) => {
-    console.log(_id);
     const response = await fetch(
       `https://react-http-7951f-default-rtdb.firebaseio.com/expenses/${_id}.json/`,
       {
@@ -83,7 +83,7 @@ const ExpensesDaily = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-6 bg-gradient-to-r from-teal-400 to-blue-500 rounded shadow-2xl">
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-gradient-to-r from-teal-400 to-blue-500  dark:bg-gradient-to-b dark:from-slate-900 dark:to-blue-400 rounded shadow-2xl">
       <motion.form
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 const ExpenseListItem = ({ expense, index, removeHandler }) => {
   const isPremium = useSelector((state) => state.expense.isPremiumActivated);
-
+  const isSubscribed = useSelector((state) => state.expense.isSubscribed);
   const handleRemove = () => {
     removeHandler(expense.id, expense._id);
   };
@@ -20,9 +20,9 @@ const ExpenseListItem = ({ expense, index, removeHandler }) => {
     >
       {isPremium ? (
         <div>
-          <p className="text-gray-400 font-bold">{expense.Amount}</p>
-          <p className="text-gray-400">{expense.Description}</p>
-          <p className="text-gray-400">{expense.Category}</p>
+          <p className="text-black font-bold">{expense.Amount}</p>
+          <p className="text-gray-500">{expense.Description}</p>
+          <p className="text-teal-500">{expense.Category}</p>
         </div>
       ) : (
         <div>

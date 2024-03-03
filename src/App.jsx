@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const themeDark = useSelector((state) => state.theme.themeDark);
 
   return (
     <>
@@ -31,7 +32,12 @@ function App() {
           path="/profile"
           element={isLoggedIn ? <ProfilePage /> : <Navigate to={"/"} />}
         />
-        <Route path="/user" element=<HomeRoot />>
+        <Route
+          path="/user"
+          element=<div className={`${themeDark ? "dark" : ""}`}>
+            <HomeRoot />
+          </div>
+        >
           <Route path="profile/:id" element={<UserProfile />} />
           <Route path="expenses" element={<ExpensesDaily />} />
         </Route>
