@@ -7,6 +7,7 @@ const ExpenseListItem = ({ expense, index, removeHandler }) => {
   const handleRemove = () => {
     removeHandler(expense.id, expense._id);
   };
+
   return (
     <motion.div
       key={index}

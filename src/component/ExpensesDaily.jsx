@@ -6,6 +6,7 @@ import { expenseAction } from "../store/Index";
 import Switcher1 from "./ToggleButton";
 const ExpensesDaily = () => {
   //   const [expenses, setExpenses] = useState([]);
+  const isSubscribed = useSelector((state) => state.expense.isSubscribed);
 
   const expenses = useSelector((state) => state.expense.expenses);
   const dispatch = useDispatch();
@@ -82,6 +83,27 @@ const ExpensesDaily = () => {
     dispatch(expenseAction.setExpenses(updatedExpense));
   };
 
+  const downloadHandler = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      "Category,Description,Amount\n" +
+      expenses
+        .map(
+          (expense) =>
+            `${expense.Category},${expense.Description},${expense.Amount}`
+        )
+        .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-3xl mx-auto mt-8 p-6 bg-gradient-to-r from-teal-400 to-blue-500  dark:bg-gradient-to-b dark:from-slate-900 dark:to-blue-400 rounded shadow-2xl">
       <motion.form
@@ -144,6 +166,16 @@ const ExpensesDaily = () => {
           >
             Submit
           </button>
+
+          {isSubscribed && (
+            <button
+              type="button"
+              onClick={downloadHandler}
+              className="bg-white hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-xl"
+            >
+              Download
+            </button>
+          )}
         </div>
       </motion.form>
 
