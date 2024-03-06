@@ -19,27 +19,72 @@ const authSlice = createSlice({
   },
 });
 
+// const expensesSlice = createSlice({
+//   name: "expenses",
+//   initialState: {
+//     expenses: [],
+//     isPremiumActivated: false,
+//     isSubscribed: false,
+//   },
+//   reducers: {
+//     addExpense: (state, action) => {
+//       state.expenses.push(action.payload);
+
+//       state.isPremiumActivated =
+//         state.expenses.reduce((total, expense) => total + expense.Amount, 0) >
+//         10000;
+//     },
+//     setExpenses: (state, action) => {
+//       state.expenses = action.payload;
+
+//       state.isPremiumActivated =
+//         state.expenses.reduce((total, expense) => total + expense.Amount, 0) >
+//         10000;
+//     },
+
+//     setIsSubscribed: (state, action) => {
+//       state.isSubscribed = action.payload;
+//     },
+//     setIsPremium: (state, action) => {
+//       state.isPremiumActivated = action.payload;
+//     },
+//   },
+// });
+
 const expensesSlice = createSlice({
   name: "expenses",
   initialState: {
     expenses: [],
-    isPremiumActivated: false,
+    isPremiumActivated:
+      localStorage.getItem("isPremiumActivated") === "true" ? true : false,
     isSubscribed: false,
   },
   reducers: {
     addExpense: (state, action) => {
       state.expenses.push(action.payload);
 
-      state.isPremiumActivated =
-        state.expenses.reduce((total, expense) => total + expense.Amount, 0) >
-        10000;
+      const totalAmount = state.expenses.reduce(
+        (total, expense) => total + expense.Amount,
+        0
+      );
+      state.isPremiumActivated = totalAmount > 10000;
+      localStorage.setItem(
+        "isPremiumActivated",
+        state.isPremiumActivated.toString()
+      );
     },
     setExpenses: (state, action) => {
       state.expenses = action.payload;
 
-      state.isPremiumActivated =
-        state.expenses.reduce((total, expense) => total + expense.Amount, 0) >
-        10000;
+      const totalAmount = state.expenses.reduce(
+        (total, expense) => total + expense.Amount,
+        0
+      );
+      state.isPremiumActivated = totalAmount > 10000;
+      localStorage.setItem(
+        "isPremiumActivated",
+        state.isPremiumActivated.toString()
+      );
     },
 
     setIsSubscribed: (state, action) => {
@@ -47,6 +92,7 @@ const expensesSlice = createSlice({
     },
     setIsPremium: (state, action) => {
       state.isPremiumActivated = action.payload;
+      localStorage.setItem("isPremiumActivated", action.payload.toString());
     },
   },
 });
