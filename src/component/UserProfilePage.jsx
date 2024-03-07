@@ -5,15 +5,14 @@ import Example from "./TiltCard";
 const UserProfilePage = () => {
   const [name, setName] = useState();
   const [profile, setProfile] = useState();
-  const navigate = useNavigate();
   const { id } = useParams();
+
+  // const apiKey = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
     const fetchUserData = async () => {
       const response = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${
-          import.meta.env.VITE_API_KEY
-        }`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=12345`,
 
         {
           method: "POST",

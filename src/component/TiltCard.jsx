@@ -70,9 +70,12 @@ const TiltCard = ({ username, userImg }) => {
           }}
           className="text-center text-2xl w-60 font-bold mt-[-10rem] rounded-lg"
         >
-          <img className="rounded-lg" src={userImg} />
+          <img className="rounded-lg" id="userImg" src={userImg} />
         </p>
-        <p className="absolute mt-56 ml-16 font-bold text-2xl text-slate-950">
+        <p
+          className="absolute mt-56 ml-16 font-bold text-2xl text-slate-950"
+          id="username"
+        >
           {username}
         </p>
       </div>
